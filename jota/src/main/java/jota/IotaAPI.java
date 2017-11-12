@@ -466,7 +466,7 @@ public class IotaAPI extends IotaAPICore {
                     if (thisBalance > 0) {
                         totalBalance += thisBalance;
                         Input inputEl = inputs.get(i);
-                        inputEl.setBalance(thisBalance);
+                        inputEl.setBalance(thisBalance-1);
                         confirmedInputs.add(inputEl);
 
                         // if we've already reached the intended input value, break out of loop
@@ -602,7 +602,7 @@ public class IotaAPI extends IotaAPICore {
             long balance = Long.parseLong(balances.get(i));
 
             if (balance > 0) {
-                final Input newEntry = new Input(addresses.get(i), balance, start + i, security);
+                final Input newEntry = new Input(null,null,addresses.get(i), balance, start + i, security);
 
                 inputs.add(newEntry);
                 // Increase totalBalance of all aggregated inputs
