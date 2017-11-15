@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import static jota.utils.Constants.INVALID_SECURITY_LEVEL_INPUT_ERROR;
 
 /**
@@ -70,18 +72,25 @@ public class IotaAPIUtils {
                 // Get the corresponding keyIndex of the address
                 int keyIndex = 0;
                 int keySecurity = 0;
-                for (Input input : inputs) {
-                    if (input.getAddress().equals(thisAddress)) {
-                        keyIndex = input.getKeyIndex();
-                        keySecurity = input.getSecurity();
-                    }
-                }
-
+                int[] key=null;
+                String localSeed = seed;
+				for (Input input : inputs) {
+					if (input.getAddress().equals(thisAddress)) {
+						keyIndex = input.getKeyIndex();
+						keySecurity = input.getSecurity();
+						if (StringUtils.isNotBlank(input.getSeed()))
+							localSeed = input.getSeed();
+						if (StringUtils.isNotBlank(input.getKey())) {
+							key = Converter.trits(input.getKey());
+							keySecurity=key.length/6561;
+						} else
+							key = new Signing(curl).key(Converter.trits(localSeed), keyIndex, keySecurity);
+					}
+				}
+                String[] newSignatures = new String[keySecurity];
                 String bundleHash = bundle.getTransactions().get(i).getBundle();
 
-                // Get corresponding private key of address
-                int[] key = new Signing(curl).key(Converter.trits(seed), keyIndex, keySecurity);
-
+ 
                 //  First 6561 trits for the firstFragment
                 int[] firstFragment = Arrays.copyOfRange(key, 0, 6561);
 
@@ -96,6 +105,7 @@ public class IotaAPIUtils {
 
                 //  Convert signature to trytes and assign the new signatureFragment
                 bundle.getTransactions().get(i).setSignatureFragments(Converter.trytes(firstSignedFragment));
+                newSignatures[0]=Converter.trytes(firstSignedFragment);
 
                 // if user chooses higher than 27-tryte security
                 // for each security level, add an additional signature
@@ -116,11 +126,17 @@ public class IotaAPIUtils {
 
                         //  Convert signature to trytes and assign it again to this bundle entry
                         bundle.getTransactions().get(i+j).setSignatureFragments(Converter.trytes(secondSignedFragment));
+                        newSignatures[j]=Converter.trytes(firstSignedFragment);
+
                     }
                 }
-            }
-        }
-
+//                System.out.println("DIGEST:"+Converter.trytes(new Signing(curl).digests(key)));
+//
+//                System.out.println("Valid signature "+(new Signing(curl).validateSignatures(thisAddress, newSignatures, bundleHash)));
+           }
+         }
+        
+ 
         List<String> bundleTrytes = new ArrayList<>();
 
         // Convert all bundle entries into trytes

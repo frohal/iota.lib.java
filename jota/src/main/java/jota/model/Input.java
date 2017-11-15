@@ -23,12 +23,12 @@ public class Input {
      * @param object 
      */
     public Input(String key	, String seed, String address, long balance, int keyIndex, int security) {
-    	this.setSeed(seed);
-    	this.setKey(key);
         this.address = address;
         this.balance = balance;
         this.keyIndex = keyIndex;
         this.security = security;
+    	this.setSeed(seed);
+    	this.setKey(key);
 
     }
 

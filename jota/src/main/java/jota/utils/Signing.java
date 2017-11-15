@@ -192,6 +192,7 @@ public class Signing {
 
             System.arraycopy(digestBuffer, 0, digests, i * HASH_LENGTH, HASH_LENGTH);
         }
+        System.out.println("DIGEST:"+Converter.trytes(digests));
         String address = Converter.trytes(address(digests));
 
         return (expectedAddress.equals(address));
