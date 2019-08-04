@@ -10,6 +10,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  **/
 public class Input {
 
+	private String seed;
+	private String key;
     private String address;
     private long balance;
     private int keyIndex;
@@ -17,12 +19,16 @@ public class Input {
 
     /**
      * Initializes a new instance of the Input class.
+     * @param string 
+     * @param object 
      */
-    public Input(String address, long balance, int keyIndex, int security) {
+    public Input(String key	, String seed, String address, long balance, int keyIndex, int security) {
         this.address = address;
         this.balance = balance;
         this.keyIndex = keyIndex;
         this.security = security;
+    	this.setSeed(seed);
+    	this.setKey(key);
 
     }
 
@@ -107,4 +113,20 @@ public class Input {
     public void setSecurity(int security) {
         this.security = security;
     }
+
+	public String getSeed() {
+		return seed;
+	}
+
+	public void setSeed(String seed) {
+		this.seed = seed;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
 }

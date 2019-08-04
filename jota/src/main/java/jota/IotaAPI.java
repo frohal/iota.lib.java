@@ -359,9 +359,9 @@ public class IotaAPI extends IotaAPICore {
     public List<String> prepareTransfers(String seed, int security, final List<Transfer> transfers, String remainder, List<Input> inputs, boolean validateInputs) throws ArgumentException {
 
         // validate seed
-        if ((!InputValidator.isValidSeed(seed))) {
-            throw new IllegalStateException(INVALID_SEED_INPUT_ERROR);
-        }
+//        if ((!InputValidator.isValidSeed(seed))) {
+//            throw new IllegalStateException(INVALID_SEED_INPUT_ERROR);
+//        }
 
         if (security < 1) {
             throw new ArgumentException(INVALID_SECURITY_LEVEL_INPUT_ERROR);
@@ -602,7 +602,7 @@ public class IotaAPI extends IotaAPICore {
             long balance = Long.parseLong(balances.get(i));
 
             if (balance > 0) {
-                final Input newEntry = new Input(addresses.get(i), balance, start + i, security);
+                final Input newEntry = new Input(null,null,addresses.get(i), balance, start + i, security);
 
                 inputs.add(newEntry);
                 // Increase totalBalance of all aggregated inputs

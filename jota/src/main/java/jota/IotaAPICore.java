@@ -310,7 +310,7 @@ public class IotaAPICore {
      * @param addresses The array list of addresses you want to get the confirmed balance from.
      * @return The confirmed balance which a list of addresses have at the latest confirmed milestone.
      */
-    private GetBalancesResponse getBalances(Integer threshold, String[] addresses) {
+    public GetBalancesResponse getBalances(Integer threshold, String[] addresses) {
         final Call<GetBalancesResponse> res = service.getBalances(IotaGetBalancesRequest.createIotaGetBalancesRequest(threshold, addresses));
         return wrapCheckedException(res).body();
     }
